@@ -3,8 +3,10 @@ package com.example.kutsis;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,8 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private TextInputLayout emailWrapper,passwordWrapper;
-    private Button loginBtn,signupBtn;
-
+    private Button loginBtn,signupBtn,resetPasswordBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +34,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
     }
 
-    private void updateUI(FirebaseUser currentUser) {
-        if (currentUser != null) {
-            Toast.makeText(this, currentUser.getEmail() + " giriş yaptı", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, SelectionActivity.class);
-            intent.putExtra("user", currentUser);
-            startActivity(intent);
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            if(user.isEmailVerified()) {
+                Toast.makeText(MainActivity.this, user.getEmail() + " giriş yaptı", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, SelectionActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(this, EmailVerificationActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            }
+
+        }
+        else{
+            Toast.makeText(MainActivity.this,  "Hoşgeldiniz!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -53,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         passwordWrapper = findViewById(R.id.passwordWrapper);
         loginBtn = findViewById(R.id.loginBtn);
         signupBtn = findViewById(R.id.signupLoginBtn);
+        resetPasswordBtn = findViewById(R.id.resetPasswordBtn);
     }
 
     private void registerHandlers(){
@@ -60,34 +73,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String eposta = emailWrapper.getEditText().getText().toString();
-                String sifre = passwordWrapper.getEditText().getText().toString();
-                emailWrapper.setError(null);
-                passwordWrapper.setError(null);
-                if(eposta != null && sifre !=null && !eposta.equals("") && !sifre.equals("")) {
-
-                    checkInputs(eposta, sifre);
+                String eposta = emailWrapper.getEditText().getText().toString().trim();
+                String sifre = passwordWrapper.getEditText().getText().toString().trim();
+                Boolean epostaCheck = epostaKontrol(eposta);
+                Boolean sifreCheck = sifreKontrol(sifre);
+                if(epostaCheck && sifreCheck) {
                     mAuth.signInWithEmailAndPassword(eposta, sifre)
                             .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
-                                public void onComplete(Task<AuthResult> task) {
+                                public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         updateUI(user);
                                     }
                                     else {
-                                        updateUI(null);
+                                        String exceptionMessage = task.getException().getLocalizedMessage();
+                                        Toast.makeText(MainActivity.this, exceptionMessage, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
-                }
-                else {
-                    if(eposta.equals("") || eposta == null) {
-                        emailWrapper.setError("Eposta adresinizi giriniz");
-                    }
-                    if(sifre.equals("") || sifre == null) {
-                        passwordWrapper.setError("Eposta adresinizi giriniz");
-                    }
                 }
 
             }
@@ -100,15 +104,34 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        resetPasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
     }
-    
-    private void checkInputs(String emailInput, String password){
-        
-        String email = emailInput;
-        if(!email.endsWith("@gmail.com"))
-            emailWrapper.setError("Hatalı Mail Adresi!");
 
-        if(password.length() < 6)
-            passwordWrapper.setError("Hatalı Şifre!");
+    private Boolean epostaKontrol (String eposta) {
+        if(TextUtils.isEmpty(eposta)) {
+            emailWrapper.setError("Lütfen email giriniz");
+            return false;
+        }
+        if(!eposta.endsWith("@gmail.com")) {
+            emailWrapper.setError("Lütfen gmail kullanınız");
+            return false;
+        }
+        emailWrapper.setError(null);
+        return true;
+    }
+    private Boolean sifreKontrol (String sifre) {
+        if(sifre.length() < 6) {
+            passwordWrapper.setError("En az 6 karekter giriniz!");
+            return false;
+        }
+        passwordWrapper.setError(null);
+        return true;
+
     }
 }

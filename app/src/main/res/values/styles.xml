@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="customTextLight">
+        <item name="android:fontFamily">@font/comfortaa</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+</resources>

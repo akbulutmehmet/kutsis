@@ -4,56 +4,39 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import com.example.kutsis.databinding.ActivitySelectionBinding;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SelectionActivity extends AppCompatActivity {
 
     FloatingActionButton fab;
-    ActivitySelectionBinding binding;
     FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = ActivitySelectionBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        replaceFragment(new DashboardFragment());
+        setContentView(R.layout.activity_selection);
 
         initComponents();
         registerHandlers();
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
     }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
-        fragmentTransaction.commit();
-
-    }
 
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SelectionActivity.this);
@@ -74,7 +57,6 @@ public class SelectionActivity extends AppCompatActivity {
     private void initComponents() {
         fab = findViewById(R.id.floatingButton);
         mAuth = FirebaseAuth.getInstance();
-
     }
 
     private void registerHandlers() {
@@ -85,23 +67,38 @@ public class SelectionActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
 
-        binding.bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.dashboardFragment:
-                        replaceFragment(new DashboardFragment());
-                        break;
-                    case R.id.profileFragment:
-                        replaceFragment(new ProfileFragment());
-                        break;
-                    case R.id.settingsFragment:
-                        replaceFragment(new SettingsFragment());
-                        break;
-                }
-                return true;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.action_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.logoutMenu:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SelectionActivity.this);
+                    builder.setMessage(R.string.logoutString);
+                    builder.setNegativeButton(R.string.no,  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(SelectionActivity.this,R.string.logoutCancel,Toast.LENGTH_SHORT).show();
+                    }
+                });
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(SelectionActivity.this, R.string.logoutOk, Toast.LENGTH_SHORT).show();
+                            FirebaseAuth.getInstance().signOut();
+                            Intent intent = new Intent(SelectionActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    builder.show();
             }
-        });
+            return super.onOptionsItemSelected(item);
     }
 }

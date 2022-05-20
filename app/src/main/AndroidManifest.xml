@@ -17,7 +17,8 @@
         android:theme="@style/Theme.Kutsis.NoActionBar">
         <activity
             android:name=".SelectionActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Kutsis" />
         <activity
             android:name=".SecimActivity"
             android:exported="false" />
@@ -28,13 +29,17 @@
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
+            android:name=".EmailVerificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Kutsis.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="com.package.name.MainActivity" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
