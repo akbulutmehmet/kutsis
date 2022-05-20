@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "588127730802",
+    "project_id": "kutsis-7090f",
+    "storage_bucket": "kutsis-7090f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588127730802:android:35b88eb919c6534b3056eb",
+        "android_client_info": {
+          "package_name": "com.mehmetakbulut.kutsis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588127730802-8j8q37n8mjb4nu2moqn1vhd1sf57d4g1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mehmetakbulut.kutsis",
+            "certificate_hash": "f7b66cb173e95ed825f83d26d885637d3bfa8273"
+          }
+        },
+        {
+          "client_id": "588127730802-jp2974bh3il3v9f9ps2cflk4i94ihirs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc_KeAjfzkQNsWNJdbyBxLlcONZrFWbyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "588127730802-jp2974bh3il3v9f9ps2cflk4i94ihirs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

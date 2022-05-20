@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Kutsis</string>
+    <string name="welcome_title">KUTSİS </string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="email_placeholder">Email</string>
+    <string name="password_placeholder">Şifre</string>
+    <string name="signup_btn">Kayıt Ol</string>
+    <string name="login_btn">Giriş Yap</string>
+    <string name="email_hint">EMail</string>
+    <string name="password_hint">Şifre</string>
+    <string name="login_fail">Email veya Şifre Hatalı</string>
+    <string name="login_success">Giriş Başarılı Yönlendiriliyorsunuz</string>
+    <string name="libraryPhotoDescription">Kütüphane resmi</string>
+    <string name="name_hint">İsim</string>
+    <string name="surname_hint">Soyisim</string>
+    <string name="title_activity_selection">SelectionActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_userdetails">User Details</string>
+    <string name="exitQuestion">Çıkış yapmak istiyor musunuz?</string>
+    <string name="no">Hayır</string>
+    <string name="yes">Evet</string>
+    <string name="Logout">Çıkış yap</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
