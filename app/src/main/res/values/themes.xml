@@ -24,4 +24,9 @@
     </style>
 
     <style name="Theme.Kutsis.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.Launcher" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/axen_red</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/kutsis_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Kutsis.NoActionBar</item>
+    </style>
 </resources>

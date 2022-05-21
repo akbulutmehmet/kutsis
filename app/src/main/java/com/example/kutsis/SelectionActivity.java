@@ -12,29 +12,73 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.kutsis.model.Kutuphane;
+import com.example.kutsis.model.Masa;
+import com.example.kutsis.model.Oda;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectionActivity extends AppCompatActivity {
 
-    FloatingActionButton fab;
-    FirebaseAuth mAuth;
-
+   private FloatingActionButton fab;
+   private FirebaseAuth mAuth;
+   private FirebaseDatabase firebaseDatabase;
+   private DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseApp.initializeApp(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selection);
 
         initComponents();
         registerHandlers();
+        Kutuphane kutuphane = new Kutuphane();
+        kutuphane.setKutuphaneId(1L);
+        List<Oda> odaList = new ArrayList<>();
+        Oda oda = new Oda();
+        oda.setOdaId(1L);
+        Masa masa = new Masa();
+        masa.setMasaId(1L);
+        masa.setReserve(true);
+        List<Masa> masaList = new ArrayList<>();
+        masaList.add(masa);
+        oda.setMasaList(masaList);
+        odaList.add(oda);
+        kutuphane.setOdaList(odaList);
+        databaseReference.child("kutuphaneler").setValue(kutuphane);
+        databaseReference = databaseReference.child("kutuphaneler");
+       databaseReference.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot snapshot) {
+               Kutuphane kutuphane1 = snapshot.getValue(Kutuphane.class);
+               Long kutuphaneId = kutuphane1.getKutuphaneId();
+               Toast.makeText(getApplicationContext(),kutuphaneId+"",Toast.LENGTH_LONG).show();
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError error) {
+
+           }
+       });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
     }
 
 
@@ -53,10 +97,21 @@ public class SelectionActivity extends AppCompatActivity {
         });
         builder.show();
     }
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
 
+        }
+        else{
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            Toast.makeText(SelectionActivity.this,  "Hoşgeldiniz!", Toast.LENGTH_SHORT).show();
+        }
+    }
     private void initComponents() {
         fab = findViewById(R.id.floatingButton);
         mAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     private void registerHandlers() {
