@@ -1,24 +1,25 @@
 package com.example.kutsis.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Kutuphane {
-    private Long kutuphaneId;
-    private List<Oda> odaList;
+public class Kutuphane implements Serializable {
+    private Long id;
+    private List<Masa> masaList;
 
-    public List<Oda> getOdaList() {
-        return odaList;
+    public void setMasaList(List<Masa> masaList) {
+        this.masaList = masaList;
     }
 
-    public void setOdaList(List<Oda> odaList) {
-        this.odaList = odaList;
+    public List<Masa> getMasaList() {
+        return masaList;
     }
 
-    public Long getKutuphaneId() {
-        return kutuphaneId;
+    public Long getId() {
+        return id;
     }
 
-    public void setKutuphaneId(Long kutuphaneId) {
-        this.kutuphaneId = kutuphaneId;
+    public void setId(Long id) {
+        this.id = id;
     }
 }
