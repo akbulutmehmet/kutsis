@@ -12,15 +12,31 @@ import com.example.kutsis.model.Masa;
 
 import java.util.List;
 
-public class MasaRecyclerViewAdapter extends
-        RecyclerView.Adapter<MasaRecyclerViewAdapter.MasaViewHolder> {
+public class MasaRecyclerViewAdapter extends RecyclerView.Adapter<MasaRecyclerViewAdapter.MasaViewHolder> {
+    private static ClickListener clickListener;
+
     private List<Masa> masaList;
-    class MasaViewHolder extends RecyclerView.ViewHolder {
+    class MasaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private TextView lblAdi;
         MasaViewHolder(View view) {
             super(view);
+            view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
+
             lblAdi = view.findViewById(R.id.masaId);
 
+        }
+
+        @Override
+        public void onClick(View view) {
+            clickListener.onItemClick(getAbsoluteAdapterPosition(), view);
+
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            clickListener.onItemLongClick(getAbsoluteAdapterPosition(), view);
+            return false;
         }
     }
     public MasaRecyclerViewAdapter(List<Masa> masaList) {
@@ -41,4 +57,13 @@ public class MasaRecyclerViewAdapter extends
     public int getItemCount() {
         return masaList.size();
     }
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
+    }
+    public void setOnItemClickListener(ClickListener clickListener) {
+        MasaRecyclerViewAdapter.clickListener = clickListener;
+    }
+
+
 }

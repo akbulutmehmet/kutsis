@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kutsis.adapter.*;
 import com.example.kutsis.model.Kutuphane;
@@ -51,15 +53,24 @@ public class SecimActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Kutuphane kutuphane = (Kutuphane) snapshot.getValue(Kutuphane.class);
                 List<Masa> masaList = kutuphane.getMasaList();
-                for (Masa masa : masaList) {
-                    Log.d("masa",masa.getId().toString());
-                }
                 LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(llm);
                 recyclerView.setHasFixedSize(true);
                 MasaRecyclerViewAdapter adapter = new MasaRecyclerViewAdapter(masaList);
+                adapter.setOnItemClickListener(new MasaRecyclerViewAdapter.ClickListener() {
+                    @Override
+                    public void onItemClick(int position, View v) {
+                        Toast.makeText(SecimActivity.this,position+"",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onItemLongClick(int position, View v) {
+                        Toast.makeText(SecimActivity.this,position+"",Toast.LENGTH_SHORT).show();
+                    }
+                });
                 recyclerView.setAdapter(adapter);
                 recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL));
+
             }
 
             @Override
@@ -72,6 +83,8 @@ public class SecimActivity extends AppCompatActivity {
     }
 
     private void registerHandlers() {
+
+
     }
 
 
