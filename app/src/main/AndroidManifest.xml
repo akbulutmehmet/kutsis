@@ -21,7 +21,9 @@
             android:theme="@style/Theme.Kutsis" />
         <activity
             android:name=".SecimActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Kutsis"
+            android:parentActivityName=".SelectionActivity"/>
         <activity
             android:name=".QRActivity"
             android:exported="false" />

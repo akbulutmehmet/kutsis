@@ -27,6 +27,7 @@ public class QRActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qractivity);
 
@@ -44,7 +45,6 @@ public class QRActivity extends AppCompatActivity {
                     public void run() {
                         Intent intent = new Intent(QRActivity.this, SecimActivity.class);
                         intent.putExtra(MESSAGE_LIBRARYID,result.getText());
-                        Log.d("deneme",result.getText());
                         startActivity(intent);
                     }
                 });

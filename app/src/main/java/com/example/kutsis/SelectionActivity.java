@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.kutsis.model.Kutuphane;
+import com.example.kutsis.model.Masa;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +24,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class SelectionActivity extends AppCompatActivity {
 
@@ -37,20 +45,13 @@ public class SelectionActivity extends AppCompatActivity {
 
         initComponents();
         registerHandlers();
+       // List<Masa> masaList = new ArrayList<>();
+       // masaList.add(new Masa(1L,true,new Date()));
+       // masaList.add(new Masa(2L,true,new Date()));
+       // masaList.add(new Masa(3L,true,new Date()));
+       // Kutuphane kutuphane = new Kutuphane(1L,masaList,"Mehmet Kütüphanesi");
+       // databaseReference.child("kutuphaneler").push().setValue(kutuphane);
 
-        databaseReference = databaseReference.child("kutuphaneler");
-       databaseReference.addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-              // Toast.makeText(getApplicationContext(),kutuphaneId+" Değişti",Toast.LENGTH_LONG).show();
-           }
-
-           @Override
-           public void onCancelled(@NonNull DatabaseError error) {
-
-           }
-       });
     }
 
     @Override
