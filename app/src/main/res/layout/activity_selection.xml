@@ -7,13 +7,31 @@
     android:layout_height="match_parent"
     tools:context=".SelectionActivity">
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <ImageView
+        android:id="@+id/startImage"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/imgHeight"
+        android:contentDescription="@string/libraryPhotoDescription"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.080"
+        app:srcCompat="@drawable/selection_img"
+        tools:srcCompat="@drawable/selection_img" />
+
+    <TextView
+        android:id="@+id/selectionActivityText"
+        style="@style/customTextLight"
+        android:layout_width="@dimen/textWidth"
+        android:layout_height="wrap_content"
+        android:text="@string/selectionActivityText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/startImage"
+        app:layout_constraintVertical_bias="0.16000003" />
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/floatingButton"
@@ -29,6 +47,8 @@
         fab:menu_colorPressed="#CCFFFFFF"
         fab:menu_colorRipple="@color/teal_700"
         fab:menu_labels_ellipsize="end"
-        fab:menu_labels_singleLine="true"></com.github.clans.fab.FloatingActionButton>
+        fab:menu_labels_singleLine="true" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

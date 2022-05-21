@@ -44,27 +44,14 @@ public class SelectionActivity extends AppCompatActivity {
 
         initComponents();
         registerHandlers();
-        Kutuphane kutuphane = new Kutuphane();
-        kutuphane.setKutuphaneId(1L);
-        List<Oda> odaList = new ArrayList<>();
-        Oda oda = new Oda();
-        oda.setOdaId(1L);
-        Masa masa = new Masa();
-        masa.setMasaId(1L);
-        masa.setReserve(true);
-        List<Masa> masaList = new ArrayList<>();
-        masaList.add(masa);
-        oda.setMasaList(masaList);
-        odaList.add(oda);
-        kutuphane.setOdaList(odaList);
-        databaseReference.child("kutuphaneler").setValue(kutuphane);
+
         databaseReference = databaseReference.child("kutuphaneler");
        databaseReference.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot snapshot) {
                Kutuphane kutuphane1 = snapshot.getValue(Kutuphane.class);
                Long kutuphaneId = kutuphane1.getKutuphaneId();
-               Toast.makeText(getApplicationContext(),kutuphaneId+"",Toast.LENGTH_LONG).show();
+               Toast.makeText(getApplicationContext(),kutuphaneId+" Değişti",Toast.LENGTH_LONG).show();
            }
 
            @Override
@@ -93,6 +80,8 @@ public class SelectionActivity extends AppCompatActivity {
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                System.exit(1);
+
             }
         });
         builder.show();
@@ -153,6 +142,10 @@ public class SelectionActivity extends AppCompatActivity {
                         }
                     });
                     builder.show();
+                    break;
+                case R.id.exitApp:
+                    onBackPressed();
+                    break;
             }
             return super.onOptionsItemSelected(item);
     }

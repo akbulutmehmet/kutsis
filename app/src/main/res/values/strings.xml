@@ -21,6 +21,7 @@
     <string name="no">Hayır</string>
     <string name="yes">Evet</string>
     <string name="Logout">Çıkış yap</string>
+    <string name="exitAppmenu">Uygulamayı Kapat</string>
     <string name="logoutString" >Oturumu sonlandırmak istiyor musunuz?</string>
     <string name="logoutCancel">Çıkış işlemi iptal edildi</string>
     <string name="logoutOk">Başarıyla çıkış yapılmıştır</string>
@@ -30,6 +31,7 @@
     <string name="emailverificationbtn">KONTROL ET</string>
     <string name="emailverificationSendMail">MAİL GÖNDER</string>
     <string name="resetpaswordbtn">ŞİFREMİ UNUTTUM</string>
+    <string name="selectionActivityText">Masaları görüntülemek ve rezervasyon yapmak için Kütüphane girişinde yer alan QR Kodu okutun.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

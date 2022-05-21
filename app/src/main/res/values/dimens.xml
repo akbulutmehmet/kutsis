@@ -4,4 +4,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="btnwidth">300dp</dimen>
+    <dimen name="imgHeight">300dp</dimen>
+    <dimen name="textWidth">300dp</dimen>
 </resources>
