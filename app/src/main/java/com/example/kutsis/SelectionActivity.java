@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.kutsis.model.Kutuphane;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,9 +42,8 @@ public class SelectionActivity extends AppCompatActivity {
        databaseReference.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot snapshot) {
-               Kutuphane kutuphane1 = snapshot.getValue(Kutuphane.class);
-               Long kutuphaneId = kutuphane1.getKutuphaneId();
-               Toast.makeText(getApplicationContext(),kutuphaneId+" Değişti",Toast.LENGTH_LONG).show();
+
+              // Toast.makeText(getApplicationContext(),kutuphaneId+" Değişti",Toast.LENGTH_LONG).show();
            }
 
            @Override

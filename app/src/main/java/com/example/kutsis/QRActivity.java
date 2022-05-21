@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class QRActivity extends AppCompatActivity {
                     public void run() {
                         Intent intent = new Intent(QRActivity.this, SecimActivity.class);
                         intent.putExtra(MESSAGE_LIBRARYID,result.getText());
+                        Log.d("deneme",result.getText());
                         startActivity(intent);
                     }
                 });
