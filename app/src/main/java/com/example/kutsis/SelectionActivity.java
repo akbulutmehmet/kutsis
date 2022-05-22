@@ -154,6 +154,10 @@ public class SelectionActivity extends AppCompatActivity {
                 case R.id.exitApp:
                     onBackPressed();
                     break;
+
+                case R.id.profileActivity:
+                    Intent intent = new Intent(SelectionActivity.this, ProfileActivity.class);
+                    startActivity(intent);
             }
             return super.onOptionsItemSelected(item);
     }
