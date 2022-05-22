@@ -18,6 +18,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             if(user.isEmailVerified()) {
+
                 Toast.makeText(MainActivity.this, user.getEmail() + " giriş yaptı", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, SelectionActivity.class);
                 intent.putExtra("user", user);
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         signupBtn = findViewById(R.id.signupLoginBtn);
         resetPasswordBtn = findViewById(R.id.resetPasswordBtn);
+
     }
 
     private void registerHandlers(){

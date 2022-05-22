@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -80,7 +82,8 @@ public class RegisterActivity extends AppCompatActivity {
                                         Toast.makeText(RegisterActivity.this, mAuth.getCurrentUser().getEmail() + " kullanıcısı kayıt yaptı.", Toast.LENGTH_SHORT).show();
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         user.sendEmailVerification();
-                                        User userRealTime = new User(eposta,name,surname);
+                                        Long id = (long) (Math.random()*100000);
+                                        User userRealTime = new User(id,eposta,name,surname,new Date(),false,null,null,null);
                                         databaseReference.child("users").child(user.getUid()).setValue(userRealTime);
                                         Intent intent = new Intent(RegisterActivity.this, EmailVerificationActivity.class);
                                         startActivity(intent);

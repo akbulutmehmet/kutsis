@@ -10,7 +10,7 @@ public class User implements Serializable {
     private String name;
     private String surName;
     private Date registerDate;
-    private Boolean reserve;
+    private boolean reserve;
     private String kutuphaneKey;
     private String kutuphaneName;
     private Long masaId;
@@ -28,11 +28,11 @@ public class User implements Serializable {
 
     }
 
-    public void setReserve(Boolean reserve) {
+    public void setReserve(boolean reserve) {
         this.reserve = reserve;
     }
 
-    public Boolean getReserve() {
+    public boolean getReserve() {
         return reserve;
     }
 
@@ -60,14 +60,18 @@ public class User implements Serializable {
         this.masaId = masaId;
     }
 
-    public User (String email, String name, String surName) {
-        id = (long) (Math.random()*100000);
-        registerDate = new Date();
+
+    public User (Long id,String email,String name,String surName,Date registerDate,boolean reserve,String kutuphaneKey,String kutuphaneName,Long masaId) {
+        this.id = id;
         this.email = email;
         this.name = name;
-        this.surName = surName;
+        this.surName =surName;
+        this.registerDate = registerDate;
+        this.reserve = reserve;
+        this.kutuphaneKey = kutuphaneKey;
+        this.kutuphaneName = kutuphaneName;
+        this.masaId = masaId;
     }
-
     public Date getRegisterDate() {
         return registerDate;
     }

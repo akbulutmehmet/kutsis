@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kutsis.model.Masa;
 import com.example.kutsis.model.User;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
@@ -36,6 +37,7 @@ public class SureActivity extends AppCompatActivity {
     private TextView textViewKalanSure, textViewKutuphane, textViewMasa;
     private Button btnSureyiUzat, btnMasayiBirak;
     private CountDownTimer timer;
+    private boolean isTimerSet;
     private long kalanDakika,kalanSaniye;
 
     @Override
@@ -68,14 +70,14 @@ public class SureActivity extends AppCompatActivity {
                         calendar.add(Calendar.MINUTE,60);
                         Date expiredDate = calendar.getTime();
                         Date nowDate = new Date();
-                        Long sure = expiredDate.getTime() - nowDate.getTime();
-                        Log.d("sure : ",sure+"");
+                        Long kalanSure = expiredDate.getTime() - nowDate.getTime();
+                        kalanDakika = TimeUnit.MINUTES.convert(kalanSure,TimeUnit.MILLISECONDS);
+                        kalanSaniye = TimeUnit.SECONDS.convert(kalanSure,TimeUnit.MILLISECONDS) - kalanDakika*60;
+                        setTimer();
 
-                        kalanDakika = TimeUnit.MINUTES.convert(sure,TimeUnit.MILLISECONDS);
-                        sure = sure - 60*60*1000;
-                        kalanSaniye = TimeUnit.SECONDS.convert(sure,TimeUnit.MILLISECONDS);
-                        Log.d("dakika : ",kalanDakika+"");
-                        Log.d("saniye : ",kalanSaniye+"");
+                        textViewKutuphane.setText(dbUser.getKutuphaneName());
+                        textViewMasa.setText("Masa: " + dbUser.getMasaId());
+
                     }
                 }
 
@@ -103,7 +105,7 @@ public class SureActivity extends AppCompatActivity {
         btnSureyiUzat = findViewById(R.id.buttonSureyiUzat);
         btnMasayiBirak = findViewById(R.id.buttonMasayiBirak);
 
-
+        isTimerSet = false;
     }
 
     private void registerHandlers(){
@@ -111,29 +113,113 @@ public class SureActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                // kullanıcının lastReserveDate'i update ediliyor.
+                DatabaseReference userRef = databaseReference.child("users").child(mAuth.getCurrentUser().getUid());
+                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User user = (User) snapshot.getValue(User.class);
+                        user.setLastReserveDate(new Date());
+                        userRef.setValue(user);
+
+
+                        // kullanıcının meşgul ettiği masanın son reserve date'i update ediliyor.
+                        DatabaseReference tableRef = databaseReference.child("kutuphaneler").child(user.getKutuphaneKey()).child("masaList").child(String.valueOf(user.getMasaId()-1));
+                        tableRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Masa masa = (Masa) snapshot.getValue(Masa.class);
+                                masa.setLastReserveDate(new Date());
+                                tableRef.setValue(masa);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+                        kalanDakika=60;
+                        kalanSaniye=0;
+                        setTimer();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
         });
 
         btnMasayiBirak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DatabaseReference userRef = databaseReference.child("users").child(mAuth.getCurrentUser().getUid());
+                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User user = (User) snapshot.getValue(User.class);
+                        user.setReserve(false);
+                        userRef.setValue(user);
 
+
+                        DatabaseReference tableRef = databaseReference.child("kutuphaneler").child(user.getKutuphaneKey()).child("masaList").child(String.valueOf(user.getMasaId()-1));
+                        tableRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Masa masa = (Masa) snapshot.getValue(Masa.class);
+                                masa.setReserve(false);
+                                tableRef.setValue(masa);
+
+                                Intent intent = new Intent(SureActivity.this, SelectionActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+                        kalanDakika=60;
+                        kalanSaniye=0;
+                        setTimer();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
     }
 
-    private void setTimer(long dakika,long saniye){
-        timer.cancel();
-        kalanDakika = dakika;
-        kalanSaniye = saniye;
-        timer = new CountDownTimer(dakika,1000) {
+    private void setTimer(){
+        if(isTimerSet)
+            timer.cancel();
+        isTimerSet = true;
+        timer = new CountDownTimer((kalanDakika*60+kalanSaniye)*1000,1000) {
             @Override
-            public void onTick(long l) {
+            public void onTick(long l)
+            {
                 kalanSaniye--;
                 if(kalanSaniye == -1){
                     kalanSaniye = 59;
                     kalanDakika--;
                 }
+                String strKalanDakika = String.valueOf(kalanDakika);
+                String strKalanSaniye = String.valueOf(kalanSaniye);
+                if(kalanDakika < 10 )
+                    strKalanDakika = "0" + strKalanDakika;
+                if(kalanSaniye < 10 )
+                    strKalanSaniye = "0" + strKalanSaniye;
+                textViewKalanSure.setText(strKalanDakika+ " : " + strKalanSaniye);
             }
 
             @Override

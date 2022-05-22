@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kutsis.model.Kutuphane;
 import com.example.kutsis.model.Masa;
+import com.example.kutsis.model.User;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class SelectionActivity extends AppCompatActivity {
 
@@ -74,7 +77,26 @@ public class SelectionActivity extends AppCompatActivity {
     }
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            databaseReference.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    User dbUser = (User) snapshot.getValue(User.class);
+                    Long gecenSure = new Date().getTime() - dbUser.getLastReserveDate().getTime();
+                    gecenSure = TimeUnit.MINUTES.convert(gecenSure,TimeUnit.MILLISECONDS);
+                    if(dbUser.getReserve() && gecenSure<60) {
+                        Intent intent = new Intent(SelectionActivity.this,SureActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
 
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
         else{
             Intent intent = new Intent(this, MainActivity.class);

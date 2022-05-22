@@ -7,7 +7,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -105,6 +109,12 @@ public class SecimActivity extends AppCompatActivity {
                 swipeToAction = new SwipeToAction(recyclerView, new SwipeToAction.SwipeListener<Masa>() {
                     @Override
                     public boolean swipeLeft(Masa masa) {
+                        Vibrator vibrator = (Vibrator) SecimActivity.this.getSystemService(getApplicationContext().VIBRATOR_SERVICE);
+                        // Oreo sonrası yeni hali
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                        else
+                            vibrator.vibrate(500);
                         masa.setReserve(true);
                         masa.setLastReserveDate(new Date());
                         int newPositon = masaList.indexOf(masa);
