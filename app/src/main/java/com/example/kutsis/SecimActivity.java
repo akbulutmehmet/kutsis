@@ -144,31 +144,30 @@ public class SecimActivity extends AppCompatActivity {
                         adapterMasaList.add(masa);
                     }
                 }
-                if(adapterMasaList.size()>0) {
-                    LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-                    recyclerView.setLayoutManager(llm);
-                    recyclerView.setHasFixedSize(true);
-                    MasaRecyclerViewAdapter adapter = new MasaRecyclerViewAdapter(adapterMasaList);
-                    adapter.setOnItemClickListener(new MasaRecyclerViewAdapter.ClickListener() {
-                        @Override
-                        public void onItemClick(int position, View v) {
-                            Masa masa = adapterMasaList.get(position);
-                            masa.setReserve(true);
-                            masa.setLastReserveDate(new Date());
-                            int newPositon = masaList.indexOf(masa);
-                            masaList.set(newPositon,masa);
-                            databaseReference.child("masaList").setValue(masaList);
-                        }
+                LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(llm);
+                recyclerView.setHasFixedSize(true);
+                MasaRecyclerViewAdapter adapter = new MasaRecyclerViewAdapter(adapterMasaList);
+                adapter.setOnItemClickListener(new MasaRecyclerViewAdapter.ClickListener() {
+                    @Override
+                    public void onItemClick(int position, View v) {
+                        Masa masa = adapterMasaList.get(position);
+                        masa.setReserve(true);
+                        masa.setLastReserveDate(new Date());
+                        int newPositon = masaList.indexOf(masa);
+                        masaList.set(newPositon,masa);
+                        databaseReference.child("masaList").setValue(masaList);
+                    }
 
-                        @Override
-                        public void onItemLongClick(int position, View v) {
-                            onItemClick(position,v);
-                        }
-                    });
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL));
-                }
-                else {
+                    @Override
+                    public void onItemLongClick(int position, View v) {
+                        onItemClick(position,v);
+                    }
+                });
+                recyclerView.setAdapter(adapter);
+                recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL));
+
+                if(adapterMasaList.size()==0) {
                     Snackbar.make(recyclerView,"Boş masa yok!",Snackbar.LENGTH_LONG).show();
                 }
 
