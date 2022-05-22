@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +35,8 @@ public class SureActivity extends AppCompatActivity {
 
     private TextView textViewKalanSure, textViewKutuphane, textViewMasa;
     private Button btnSureyiUzat, btnMasayiBirak;
+    private CountDownTimer timer;
+    private long kalanDakika,kalanSaniye;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +63,19 @@ public class SureActivity extends AppCompatActivity {
                     Long gecenSure = new Date().getTime() - dbUser.getLastReserveDate().getTime();
                     gecenSure = TimeUnit.MINUTES.convert(gecenSure,TimeUnit.MILLISECONDS);
                     if (dbUser.getReserve() && gecenSure<60L) {
-                        textViewKutuphane.setText(dbUser.getKutuphaneName());
-                        textViewMasa.setText("Masa : "+dbUser.getMasaId());
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(dbUser.getLastReserveDate());
+                        calendar.add(Calendar.MINUTE,60);
+                        Date expiredDate = calendar.getTime();
+                        Date nowDate = new Date();
+                        Long sure = expiredDate.getTime() - nowDate.getTime();
+                        Log.d("sure : ",sure+"");
+
+                        kalanDakika = TimeUnit.MINUTES.convert(sure,TimeUnit.MILLISECONDS);
+                        sure = sure - 60*60*1000;
+                        kalanSaniye = TimeUnit.SECONDS.convert(sure,TimeUnit.MILLISECONDS);
+                        Log.d("dakika : ",kalanDakika+"");
+                        Log.d("saniye : ",kalanSaniye+"");
                     }
                 }
 
@@ -105,4 +121,26 @@ public class SureActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setTimer(long dakika,long saniye){
+        timer.cancel();
+        kalanDakika = dakika;
+        kalanSaniye = saniye;
+        timer = new CountDownTimer(dakika,1000) {
+            @Override
+            public void onTick(long l) {
+                kalanSaniye--;
+                if(kalanSaniye == -1){
+                    kalanSaniye = 59;
+                    kalanDakika--;
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                btnMasayiBirak.callOnClick();
+            }
+        }.start();
+    }
+
 }

@@ -6,4 +6,6 @@
     <dimen name="btnwidth">300dp</dimen>
     <dimen name="imgHeight">300dp</dimen>
     <dimen name="textWidth">300dp</dimen>
+    <dimen name="marginLeft">20dp</dimen>
+    <dimen name="marginRight">20dp</dimen>
 </resources>
