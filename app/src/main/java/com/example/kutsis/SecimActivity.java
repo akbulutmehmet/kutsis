@@ -140,7 +140,7 @@ public class SecimActivity extends AppCompatActivity {
                     Masa masa = iterator.next();
                     Long gecenSure = new Date().getTime() - masa.getLastReserveDate().getTime();
                     gecenSure = TimeUnit.MINUTES.convert(gecenSure,TimeUnit.MILLISECONDS);
-                    if(!masa.getReserve() && gecenSure>60L) {
+                    if(!masa.getReserve() || gecenSure>60L) {
                         adapterMasaList.add(masa);
                     }
                 }
