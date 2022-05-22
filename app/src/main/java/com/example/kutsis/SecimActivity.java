@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.kutsis.adapter.MasaRecyclerViewAdapter;
 import com.example.kutsis.model.Kutuphane;
 import com.example.kutsis.model.Masa;
+import com.example.kutsis.model.User;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -157,6 +158,26 @@ public class SecimActivity extends AppCompatActivity {
                         int newPositon = masaList.indexOf(masa);
                         masaList.set(newPositon,masa);
                         databaseReference.child("masaList").setValue(masaList);
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                User user = (User) snapshot.getValue(User.class);
+                                user.setKutuphaneKey(key);
+                                user.setKutuphaneName(kutuphane.getKutuphaneName());
+                                user.setMasaId(masa.getId());
+                                user.setReserve(true);
+                                user.setLastReserveDate(masa.getLastReserveDate());
+                                userRef.setValue(user);
+                                Intent intent = new Intent(SecimActivity.this,SureActivity.class);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                     }
 
                     @Override

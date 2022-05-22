@@ -10,11 +10,57 @@ public class User implements Serializable {
     private String name;
     private String surName;
     private Date registerDate;
+    private Boolean reserve;
+    private String kutuphaneKey;
+    private String kutuphaneName;
+    private Long masaId;
+    private Date lastReserveDate;
+
+    public void setLastReserveDate(Date lastReserveDate) {
+        this.lastReserveDate = lastReserveDate;
+    }
+
+    public Date getLastReserveDate() {
+        return lastReserveDate;
+    }
 
     public User () {
 
     }
-    public User (String email,String name,String surName) {
+
+    public void setReserve(Boolean reserve) {
+        this.reserve = reserve;
+    }
+
+    public Boolean getReserve() {
+        return reserve;
+    }
+
+    public String getKutuphaneKey() {
+        return kutuphaneKey;
+    }
+
+    public void setKutuphaneKey(String kutuphaneKey) {
+        this.kutuphaneKey = kutuphaneKey;
+    }
+
+    public String getKutuphaneName() {
+        return kutuphaneName;
+    }
+
+    public void setKutuphaneName(String kutuphaneName) {
+        this.kutuphaneName = kutuphaneName;
+    }
+
+    public Long getMasaId() {
+        return masaId;
+    }
+
+    public void setMasaId(Long masaId) {
+        this.masaId = masaId;
+    }
+
+    public User (String email, String name, String surName) {
         id = (long) (Math.random()*100000);
         registerDate = new Date();
         this.email = email;
