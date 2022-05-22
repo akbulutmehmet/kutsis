@@ -10,19 +10,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.kutsis.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private TextInputLayout emailWrapper,passwordWrapper;
+    private TextInputLayout emailWrapper,passwordWrapper,nameWrapper,surnameWrapper;
     private Button registerBtn;
-
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +66,12 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String eposta = emailWrapper.getEditText().getText().toString().trim();
                 String sifre = passwordWrapper.getEditText().getText().toString().trim();
+                String name = nameWrapper.getEditText().getText().toString().trim();
+                String surname = surnameWrapper.getEditText().getText().toString().trim();
                 Boolean epostaCheck = epostaKontrol(eposta);
                 Boolean sifreCheck = sifreKontrol(sifre);
 
-                if(epostaCheck && sifreCheck) {
+                if(epostaCheck && sifreCheck && !TextUtils.isEmpty(name) && !TextUtils.isEmpty(surname)) {
                     mAuth.createUserWithEmailAndPassword(eposta, sifre)
                             .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -74,6 +80,8 @@ public class RegisterActivity extends AppCompatActivity {
                                         Toast.makeText(RegisterActivity.this, mAuth.getCurrentUser().getEmail() + " kullanıcısı kayıt yaptı.", Toast.LENGTH_SHORT).show();
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         user.sendEmailVerification();
+                                        User userRealTime = new User(eposta,name,surname);
+                                        databaseReference.child("users").child(user.getUid()).setValue(userRealTime);
                                         Intent intent = new Intent(RegisterActivity.this, EmailVerificationActivity.class);
                                         startActivity(intent);
                                     }
@@ -115,6 +123,10 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         emailWrapper = findViewById(R.id.mailWrapper);
         passwordWrapper = findViewById(R.id.passwordWrapper);
+        nameWrapper = findViewById(R.id.nameWrapper);
+        surnameWrapper = findViewById(R.id.surnameWrapper);
         registerBtn = findViewById(R.id.btnRegister);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 }

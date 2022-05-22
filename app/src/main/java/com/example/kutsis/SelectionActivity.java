@@ -45,13 +45,6 @@ public class SelectionActivity extends AppCompatActivity {
 
         initComponents();
         registerHandlers();
-       // List<Masa> masaList = new ArrayList<>();
-       // masaList.add(new Masa(1L,true,new Date()));
-       // masaList.add(new Masa(2L,true,new Date()));
-       // masaList.add(new Masa(3L,true,new Date()));
-       // Kutuphane kutuphane = new Kutuphane(1L,masaList,"Mehmet Kütüphanesi");
-       // databaseReference.child("kutuphaneler").push().setValue(kutuphane);
-
     }
 
     @Override
